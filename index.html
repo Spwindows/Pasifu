@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>SP Window Cleaning – Instant Estimate</title>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<style>
+body { font-family: Arial, sans-serif; background:#f5f5f5; margin:0; padding:20px; }
+.container { max-width:520px; margin:auto; background:#fff; padding:20px; border-radius:8px; }
+h2 { text-align:center; }
+label { display:block; margin-top:12px; }
+input, select, button {
+  width:100%; padding:10px; margin-top:6px;
+  border-radius:5px; border:1px solid #ccc;
+}
+button { background:#0b5ed7; color:#fff; font-size:16px; border:none; margin-top:20px; }
+.price-box { margin-top:20px; font-size:22px; text-align:center; font-weight:bold; }
+.small { font-size:12px; color:#666; text-align:center; margin-top:6px; }
+
+.logo{display:block;margin:0 auto 14px;max-width:160px;height:auto;}
+</style>
+</head>
+<body>
+<div class="container">
+<img alt="SP Window Cleaning" class="logo" src="logo.png"/><h2>Instant Window Cleaning Estimate</h2>
+<form action="https://formsubmit.co/info@spwindowcleaning.com.au" method="POST">
+<input name="_subject" type="hidden" value="New Window Cleaning Estimate"/>
+<input name="_captcha" type="hidden" value="false"/>
+<input id="estimateField" name="estimate" type="hidden"/>
+<label>Full Name</label>
+<input name="name" required="" type="text"/>
+<label>Email</label>
+<input name="email" required="" type="email"/>
+<label>Phone</label>
+<input name="phone" required="" type="tel"/>
+<label>Number of Windows</label>
+<input id="windows" min="0" type="number" value="0"/>
+<label>Number of Tracks</label>
+<input id="tracks" min="0" type="number" value="0"/>
+<label>Number of Flyscreens</label>
+<input id="screens" min="0" type="number" value="0"/>
+<select id="serviceType"><option value="standard">Internal + External (Standard)</option><option value="external">External Only (52%)</option></select><label>Service Type</label><label>Storeys</label>
+<select id="storeys">
+<option value="1">Single Storey</option>
+<option value="2">Two Storey</option>
+</select>
+<div class="price-box" id="price">$0</div>
+<div class="small">Final price shown includes GST</div>
+<button type="submit">Request Booking</button>
+</form>
+</div>
+<script>
+const RATE_PER_HOUR = 135;
+
+function roundUpTo10(num) {
+  return Math.ceil(num / 10) * 10;
+}
+
+function calculate() {
+  const windows = Number(document.getElementById("windows").value);
+  const tracks = Number(document.getElementById("tracks").value);
+  const screens = Number(document.getElementById("screens").value);
+  const storeys = Number(document.getElementById("storeys").value);
+
+  let minutes =
+    (windows * 8) +
+    (tracks * 7) +
+    (screens * 1.5);
+
+  let hours = minutes / 60;
+  let price = hours * RATE_PER_HOUR;
+
+  if (storeys === 2) {
+    price *= 1.15;
+  }
+
+  if (hours > 6) {
+    price += 100;
+  }
+
+  price = roundUpTo10(price);
+
+  document.getElementById("price").innerText = `$${price}`;
+  document.getElementById("estimateField").value = `$${price}`;
+}
+
+document.querySelectorAll("input, select").forEach(el => {
+  el.addEventListener("input", calculate);
+});
+</script>
+</body>
+</html>
